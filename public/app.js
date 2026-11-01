@@ -27,6 +27,65 @@ function getAuthTokenQuery() {
   return token ? `&auth_token=${encodeURIComponent(token)}` : '';
 }
 
+// Universal clipboard helper with multiple fallback layers
+async function copyTextToClipboard(text, successMessage = 'Copied to clipboard!') {
+  if (!text || text === '#' || text === '...') {
+    showToast('Link is not available to copy');
+    return false;
+  }
+
+  let success = false;
+
+  // 1. Try modern Clipboard API
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    try {
+      await navigator.clipboard.writeText(text);
+      success = true;
+    } catch (e) {
+      success = false;
+    }
+  }
+
+  // 2. Fallback using temporary textarea
+  if (!success) {
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      textarea.style.top = '0';
+      textarea.style.opacity = '0';
+      textarea.setAttribute('readonly', '');
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      textarea.setSelectionRange(0, textarea.value.length);
+      success = document.execCommand('copy');
+      document.body.removeChild(textarea);
+    } catch (e) {
+      success = false;
+    }
+  }
+
+  // 3. Prompt fallback if both automated clipboard methods are blocked by the browser
+  if (!success) {
+    try {
+      window.prompt('Copy link:', text);
+      success = true;
+    } catch (e) {
+      success = false;
+    }
+  }
+
+  if (success) {
+    showToast(successMessage);
+  } else {
+    showToast('Failed to copy link');
+  }
+
+  return success;
+}
+
 // State
 let currentPath = '';
 let currentItems = [];
@@ -505,16 +564,20 @@ function renderGridView(items) {
   items.forEach(item => {
     const card = document.createElement('div');
     card.className = 'grid-item';
-    card.title = item.isDirectory ? `${item.name} (Folder, ${item.sizeFormatted || 'Empty'})` : `${item.name} (${item.sizeFormatted})`;
 
     const iconSvg = getFileSvg(item);
     const iconClass = item.isDirectory ? 'item-icon-wrapper folder-icon' : 'item-icon-wrapper';
 
-    const sizeText = item.isDirectory
-      ? (item.sizeFormatted && item.sizeFormatted !== '0 B' && item.sizeFormatted !== 'Empty'
-          ? `${item.sizeFormatted} • ${item.itemCount || 0} items`
-          : (item.itemCount ? `${item.itemCount} items` : 'Empty'))
-      : item.sizeFormatted;
+    let sizeText = item.sizeFormatted || '0 B';
+    if (item.isDirectory) {
+      const count = item.itemCount || 0;
+      const countLabel = `${count} item${count === 1 ? '' : 's'}`;
+      const sizeLabel = item.sizeFormatted || '0 B';
+      sizeText = `${sizeLabel} • ${countLabel}`;
+      card.title = `${item.name} (Folder, ${sizeLabel}, ${countLabel})`;
+    } else {
+      card.title = `${item.name} (${item.sizeFormatted || '0 B'})`;
+    }
 
     card.innerHTML = `
       <button class="grid-item-menu-btn" title="Options" aria-label="Item options">
@@ -549,9 +612,13 @@ function renderTableView(items) {
     const canDelete = currentUser?.role === 'admin' || currentUser?.permissions?.canDelete;
     const canDownload = currentUser?.role === 'admin' || currentUser?.permissions?.canDownload;
 
-    const tableSize = item.isDirectory
-      ? (item.sizeFormatted && item.sizeFormatted !== 'Empty' ? `${item.sizeFormatted} (${item.itemCount || 0} items)` : '0 B')
-      : item.sizeFormatted;
+    let tableSize = item.sizeFormatted || '0 B';
+    if (item.isDirectory) {
+      const count = item.itemCount || 0;
+      const countLabel = `${count} item${count === 1 ? '' : 's'}`;
+      const sizeLabel = item.sizeFormatted || '0 B';
+      tableSize = `${sizeLabel} (${countLabel})`;
+    }
 
     row.innerHTML = `
       <td>
@@ -600,12 +667,18 @@ function handleItemClick(item) {
 // Mobile & Tablet Action Bottom Sheet
 function openItemActionSheet(item) {
   activeSheetItem = item;
-  actionSheetItemName.textContent = item.name;
-
   if (item.isDirectory) {
+    const count = item.itemCount || 0;
+    const countLabel = `${count} item${count === 1 ? '' : 's'}`;
+    const sizeLabel = item.sizeFormatted || '0 B';
+    const headerTitle = `${item.name} (${sizeLabel}, ${countLabel})`;
+    actionSheetItemName.textContent = headerTitle;
+    actionSheetItemName.title = headerTitle;
     sheetOpenLabel.textContent = 'Open Folder';
     sheetDownloadLabel.textContent = 'Download Folder as ZIP';
   } else {
+    actionSheetItemName.textContent = `${item.name} (${item.sizeFormatted || '0 B'})`;
+    actionSheetItemName.title = `${item.name} (${item.sizeFormatted || '0 B'})`;
     if (isTextEditable(item)) {
       sheetOpenLabel.textContent = 'Edit in Code Editor';
     } else if (isMedia(item)) {
@@ -1188,11 +1261,7 @@ async function loadGuests() {
       const copyPassBtn = card.querySelector('.copy-pass-btn');
       if (copyPassBtn) {
         copyPassBtn.onclick = () => {
-          navigator.clipboard.writeText(g.password).then(() => {
-            showToast(`Password copied for @${g.username}`);
-          }).catch(() => {
-            showToast(`Password: ${g.password}`);
-          });
+          copyTextToClipboard(g.password, `Password copied for @${g.username}`);
         };
       }
 
@@ -1781,10 +1850,8 @@ function updateLocalNetworkInfo() {
 
 if (copyLocalUrlBtn) {
   copyLocalUrlBtn.onclick = () => {
-    const localUrl = currentLocalUrl || window.location.origin;
-    navigator.clipboard.writeText(localUrl)
-      .then(() => showToast('Local LAN link copied to clipboard!'))
-      .catch(() => showToast('Failed to copy link'));
+    const localUrl = currentLocalUrl || settingsLocalUrl?.href || settingsLocalUrl?.textContent || window.location.origin;
+    copyTextToClipboard(localUrl, 'Local LAN link copied to clipboard!');
   };
 }
 
@@ -1816,6 +1883,9 @@ if (serverNameForm) {
 
 function updateRemoteModalUI(data) {
   const isOnline = Boolean(data && data.running && data.url);
+  if (data && data.url) {
+    currentTunnelUrl = data.url;
+  }
   if (remoteSwitchCheckbox) {
     remoteSwitchCheckbox.checked = isOnline;
   }
@@ -1844,6 +1914,10 @@ function updateRemoteModalUI(data) {
   } else {
     if (remoteActiveSection) remoteActiveSection.style.display = 'none';
     if (remoteInactiveSection) remoteInactiveSection.style.display = 'block';
+    if (remoteModalLink) {
+      remoteModalLink.href = '#';
+      remoteModalLink.textContent = '...';
+    }
   }
 }
 
@@ -1869,11 +1943,38 @@ if (remoteSwitchCheckbox) {
 }
 
 if (copyRemoteUrlBtn) {
-  copyRemoteUrlBtn.onclick = () => {
-    if (currentTunnelUrl) {
-      navigator.clipboard.writeText(currentTunnelUrl)
-        .then(() => showToast('Remote link copied to clipboard!'))
-        .catch(() => showToast('Failed to copy link'));
+  copyRemoteUrlBtn.onclick = async () => {
+    let url = currentTunnelUrl;
+    if (!url && remoteModalLink) {
+      const href = remoteModalLink.getAttribute('href');
+      if (href && href !== '#' && href.startsWith('http')) {
+        url = href;
+      } else {
+        const text = remoteModalLink.textContent?.trim();
+        if (text && text !== '...' && text.startsWith('http')) {
+          url = text;
+        }
+      }
+    }
+    if (!url && window.location.protocol === 'https:' && window.location.hostname.includes('trycloudflare.com')) {
+      url = window.location.origin;
+    }
+    if (!url) {
+      try {
+        const res = await fetch('/api/system/tunnel');
+        const data = await res.json();
+        if (data && data.url) {
+          url = data.url;
+          currentTunnelUrl = data.url;
+          updateRemoteModalUI(data);
+        }
+      } catch (e) {}
+    }
+
+    if (url) {
+      await copyTextToClipboard(url, 'Remote link copied to clipboard!');
+    } else {
+      showToast('Remote link is not active or available');
     }
   };
 }
@@ -2054,26 +2155,8 @@ if (copyCurrentPathBtn) {
       showToast('No directory path available');
       return;
     }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(currentPath).then(() => {
-        showToast(`Copied folder path: ${currentPath}`);
-      }).catch(() => {
-        fallbackCopyText(currentPath);
-      });
-    } else {
-      fallbackCopyText(currentPath);
-    }
+    copyTextToClipboard(currentPath, `Copied folder path: ${currentPath}`);
   };
-}
-
-function fallbackCopyText(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  document.body.appendChild(ta);
-  ta.select();
-  document.execCommand('copy');
-  document.body.removeChild(ta);
-  showToast(`Copied: ${text}`);
 }
 
 viewToggleBtn.onclick = () => {

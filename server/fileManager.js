@@ -90,20 +90,30 @@ const SKIPPED_DIRS = new Set([
   'System Volume Information'
 ]);
 
+const folderSizeCache = new Map();
+
 // Calculate directory size and file count safely with strict scanning limit
-export async function getDirectorySize(dirPath, maxDepth = 1) {
+export async function getDirectorySize(dirPath, maxDepth = 2, maxTimeoutMs = 80, mtimeMs = null) {
+  const cached = folderSizeCache.get(dirPath);
+  if (cached && (Date.now() - cached.timestamp < 60000)) {
+    if (mtimeMs === null || cached.mtimeMs === mtimeMs) {
+      return cached;
+    }
+  }
+
   let totalBytes = 0;
   let fileCount = 0;
   let folderCount = 0;
   let scanned = 0;
-  const maxScanned = 1000;
+  const maxScanned = 1500;
+  const startTime = Date.now();
 
   async function walk(currentPath, depth) {
-    if (depth > maxDepth || scanned >= maxScanned) return;
+    if (depth > maxDepth || scanned >= maxScanned || (Date.now() - startTime) > maxTimeoutMs) return;
     try {
       const entries = await fs.promises.readdir(currentPath, { withFileTypes: true });
       for (const entry of entries) {
-        if (scanned >= maxScanned) break;
+        if (scanned >= maxScanned || (Date.now() - startTime) > maxTimeoutMs) break;
         if (entry.name.startsWith('.')) continue;
         if (SKIPPED_DIRS.has(entry.name)) continue;
         const full = path.join(currentPath, entry.name);
@@ -128,12 +138,17 @@ export async function getDirectorySize(dirPath, maxDepth = 1) {
     await walk(dirPath, 0);
   }
 
-  return {
+  const result = {
     totalBytes,
     fileCount,
     folderCount,
-    formatted: formatBytes(totalBytes)
+    formatted: formatBytes(totalBytes),
+    mtimeMs: mtimeMs || null,
+    timestamp: Date.now()
   };
+
+  folderSizeCache.set(dirPath, result);
+  return result;
 }
 
 export async function listDirectory(targetPath, showHidden = false, user = null) {
@@ -191,22 +206,32 @@ export async function listDirectory(targetPath, showHidden = false, user = null)
     } catch (err) {}
   }
 
-  // Process directories quickly and safely without blocking deep recursive traversal
+  // Process directories with safe size and item count calculation
   const dirItems = await Promise.all(dirEntries.map(async ({ entry, itemPath, itemStat }) => {
     let itemCount = 0;
     try {
       const subEntries = await fs.promises.readdir(itemPath);
-      itemCount = subEntries.length;
+      itemCount = subEntries.filter(e => showHidden || !e.startsWith('.')).length;
     } catch (e) {
       itemCount = 0;
     }
+
+    let dirInfo;
+    try {
+      dirInfo = await getDirectorySize(itemPath, 2, 80, itemStat.mtimeMs);
+    } catch (e) {
+      dirInfo = { totalBytes: 0, fileCount: 0, formatted: '0 B' };
+    }
+
+    const dirSize = dirInfo.totalBytes || 0;
+    currentTotalBytes += dirSize;
 
     return {
       name: entry.name,
       path: itemPath,
       isDirectory: true,
-      size: 0,
-      sizeFormatted: itemCount === 0 ? 'Empty' : `${itemCount} item${itemCount === 1 ? '' : 's'}`,
+      size: dirSize,
+      sizeFormatted: formatBytes(dirSize),
       itemCount,
       mtime: itemStat.mtime.toISOString(),
       mime: 'folder',
