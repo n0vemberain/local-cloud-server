@@ -7,8 +7,8 @@ A lightweight, self-hosted personal cloud that turns your computer into a privat
 ## Repository Structure
 
 - **`LocalServerCodebase/`**: Core Node.js backend server, web dashboard, API handlers, and assets.
-- **`LocalServerMacOs/`**: Dedicated macOS native desktop application (Electron), source code, and assets.
-- **`LocalServerWindows/`**: Dedicated Windows build assets and executables.
+- **`LocalServerWindows/`**: Dedicated Windows desktop application (Electron), NSIS installer source code, and assets.
+- **`LocalServerMacOs/`**: Dedicated macOS native desktop application (Electron), DMG source code, and assets.
 
 ---
 
@@ -16,14 +16,16 @@ A lightweight, self-hosted personal cloud that turns your computer into a privat
 
 Pre-compiled standalone desktop installers are available via **[GitHub Releases](https://github.com/n0vemberain/local-cloud-server/releases)**:
 
+🔗 **Official Release Page**: [Local Cloud Server v1.0.0 (Windows & macOS)](https://github.com/n0vemberain/local-cloud-server/releases/tag/v1.0.0)
+
 | Platform | Version | Architecture | Package Type | Direct Download Link |
 |---|---|---|---|---|
 | **Windows** | `v1.0.0` | 64-bit Intel / AMD (`x64`) | NSIS Setup Installer (`.exe`) | [Download EXE (v1.0.0)](https://github.com/n0vemberain/local-cloud-server/releases/download/v1.0.0/Local-Cloud-Server-1.0.0-Windows-x64.exe) |
 | **macOS** | `v1.0.0` | Apple Silicon (`arm64` / M1, M2, M3, M4) | Apple Disk Image (`.dmg`) | [Download DMG (v1.0.0)](https://github.com/n0vemberain/local-cloud-server/releases/download/v1.0.0/Local-Cloud-Server-1.0.0-macOS-arm64.dmg) |
 
 > [!TIP]
-> - **Windows Users**: Download the `.exe` installer, run the setup wizard to create Desktop/Start Menu shortcuts, and launch.
-> - **macOS Users**: Download the `.dmg` file, drag **Local Cloud Server** to your **Applications** folder, and launch.
+> - **Windows Users**: Download `Local-Cloud-Server-1.0.0-Windows-x64.exe`, run the setup wizard to install and create Desktop/Start Menu shortcuts, and launch.
+> - **macOS Users**: Download `Local-Cloud-Server-1.0.0-macOS-arm64.dmg`, drag **Local Cloud Server** to your **Applications** folder, and launch. No terminal commands required.
 
 ---
 
@@ -115,7 +117,7 @@ Open the URL shown in the terminal (Local URL or Remote URL) or scan the termina
 | Field | Default Value | Notes |
 |---|---|---|
 | **Username** | `admin` | Default master administrator username |
-| **Password** | `mac1234` | Change anytime in Settings -> Security |
+| **Password** | `win1234` (Windows) / `mac1234` (macOS) | Change anytime in Dashboard -> Settings -> Security |
 
 ---
 
