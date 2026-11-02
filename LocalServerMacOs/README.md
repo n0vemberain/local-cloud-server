@@ -20,18 +20,19 @@ A native macOS desktop application and `.dmg` installer that turns your MacBook 
 
 ---
 
-## How to Install the DMG
+## How to Download & Install the DMG
 
-The installer is located inside `LocalServerMacOs/release`:
+You can download the compiled `.dmg` installer directly from the [GitHub Releases page](https://github.com/n0vemberain/local-cloud-server/releases):
 
-```
-LocalServerMacOs/release/Local Cloud Server-1.0.0-macOS-arm64.dmg
-```
+- **Direct Download Link**: [Local-Cloud-Server-1.0.0-macOS-arm64.dmg](https://github.com/n0vemberain/local-cloud-server/releases/download/v1.0.0/Local-Cloud-Server-1.0.0-macOS-arm64.dmg)
 
-1. Double-click `Local Cloud Server-1.0.0-macOS-arm64.dmg` in Finder (inside `LocalServerMacOs/release`).
-2. Drag **Local Cloud Server** into the **Applications** folder shortcut.
-3. Open **Local Cloud Server** from Applications, Launchpad, or Spotlight (`Cmd + Space`).
-4. That's it! Your local cloud server is now running.
+### Installation Steps:
+1. Download `Local-Cloud-Server-1.0.0-macOS-arm64.dmg`.
+2. Double-click the `.dmg` file in Finder.
+3. Drag **Local Cloud Server** into the **Applications** folder shortcut.
+4. Open **Local Cloud Server** from Applications, Launchpad, or Spotlight (`Cmd + Space`).
+5. That's it! Your local cloud server is now running automatically.
+
 
 ---
 

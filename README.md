@@ -7,16 +7,27 @@ A lightweight, self-hosted personal cloud that turns your computer into a privat
 ## Repository Structure
 
 - **`LocalServerCodebase/`**: Core Node.js backend server, web dashboard, API handlers, and assets.
-- **`LocalServerMacOs/`**: Dedicated macOS native desktop application (Electron), source code, assets, and `.dmg` installer located in `LocalServerMacOs/release/`.
+- **`LocalServerMacOs/`**: Dedicated macOS native desktop application (Electron), source code, and assets.
 - **`LocalServerWindows/`**: Dedicated Windows build assets and executables.
 
 ---
 
-## macOS Native Application (DMG Installer)
+## Downloads & Releases
 
-For macOS users, a standalone desktop application (`.dmg`) is provided in `LocalServerMacOs/release/Local Cloud Server-1.0.0-macOS-arm64.dmg`.
+Pre-compiled standalone desktop installers are available via **[GitHub Releases](https://github.com/n0vemberain/local-cloud-server/releases)**:
 
-### Key Features of macOS App:
+| Platform | Version | Architecture | Package Type | Direct Download Link |
+|---|---|---|---|---|
+| **macOS** | `v1.0.0` | Apple Silicon (`arm64` / M1, M2, M3, M4) | Apple Disk Image (`.dmg`) | [Download DMG (v1.0.0)](https://github.com/n0vemberain/local-cloud-server/releases/download/v1.0.0/Local-Cloud-Server-1.0.0-macOS-arm64.dmg) |
+
+> [!TIP]
+> Download the `.dmg` file, open it in Finder, drag **Local Cloud Server** to your **Applications** folder, and launch it directly. No terminal commands required.
+
+---
+
+## macOS Native Application Features
+
+For MacBook and Mac desktop users:
 - **Zero Terminal Requirement**: Just double-click the app to start the server.
 - **Auto Wi-Fi Detection & QR Code**: Instantly scans your local Wi-Fi interface and renders a QR code for mobile devices.
 - **Encrypted Remote Tunneling**: Auto-initializes Cloudflare Tunnel for worldwide secure access with remote QR code.
@@ -24,6 +35,7 @@ For macOS users, a standalone desktop application (`.dmg`) is provided in `Local
 - **High-Performance Video Streaming**: Native HTTP 206 partial-range video streaming and real-time transcoding for MKV/MP4/MOV/AVI.
 - **macOS Menu Bar Tray**: Runs quietly in the status bar even when the window is closed, preventing accidental server stops.
 - **Retina SVG UI**: Modern clean styling without emojis.
+
 
 
 ---
