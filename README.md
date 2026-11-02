@@ -89,9 +89,13 @@ npm install
 
 - **macOS / Linux**:
   ```bash
+  npm start
+  ```
+  or
+  ```bash
   ./start.sh
   ```
-  *(or `npm start`)*
+  
 
 - **Windows**:
   ```cmd
