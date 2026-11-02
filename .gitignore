@@ -18,11 +18,11 @@ bin/
 .env
 .env.local
 
-# Test reports
-**/TEST_REPORT.md
-TEST_REPORT.md
 
-# macOS Desktop App Build Outputs & Installers (hosted via GitHub Releases)
+# macOS and Windows Desktop App Build Outputs & Installers (hosted via GitHub Releases)
 LocalServerMacOs/release/
+LocalServerWindows/release/
+LocalServerWindows/bin/
+LocalServerWindows/node_modules
 
 

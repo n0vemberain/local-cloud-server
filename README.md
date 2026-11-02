@@ -18,22 +18,28 @@ Pre-compiled standalone desktop installers are available via **[GitHub Releases]
 
 | Platform | Version | Architecture | Package Type | Direct Download Link |
 |---|---|---|---|---|
+| **Windows** | `v1.0.0` | 64-bit Intel / AMD (`x64`) | NSIS Setup Installer (`.exe`) | [Download EXE (v1.0.0)](https://github.com/n0vemberain/local-cloud-server/releases/download/v1.0.0/Local-Cloud-Server-1.0.0-Windows-x64.exe) |
 | **macOS** | `v1.0.0` | Apple Silicon (`arm64` / M1, M2, M3, M4) | Apple Disk Image (`.dmg`) | [Download DMG (v1.0.0)](https://github.com/n0vemberain/local-cloud-server/releases/download/v1.0.0/Local-Cloud-Server-1.0.0-macOS-arm64.dmg) |
 
 > [!TIP]
-> Download the `.dmg` file, open it in Finder, drag **Local Cloud Server** to your **Applications** folder, and launch it directly. No terminal commands required.
+> - **Windows Users**: Download the `.exe` installer, run the setup wizard to create Desktop/Start Menu shortcuts, and launch.
+> - **macOS Users**: Download the `.dmg` file, drag **Local Cloud Server** to your **Applications** folder, and launch.
 
 ---
 
-## macOS Native Application Features
+## Native Desktop Application Highlights (Windows & macOS)
 
-For MacBook and Mac desktop users:
-- **Zero Terminal Requirement**: Just double-click the app to start the server.
+- **Zero Terminal Requirement**: Simply double-click the app from Desktop, Start Menu, or Applications.
 - **Auto Wi-Fi Detection & QR Code**: Instantly scans your local Wi-Fi interface and renders a QR code for mobile devices.
 - **Encrypted Remote Tunneling**: Auto-initializes Cloudflare Tunnel for worldwide secure access with remote QR code.
 - **Collapsible Sidebar**: Modern collapsible navigation sidebar with smooth animations and edge trigger tab.
 - **High-Performance Video Streaming**: Native HTTP 206 partial-range video streaming and real-time transcoding for MKV/MP4/MOV/AVI.
-- **macOS Menu Bar Tray**: Runs quietly in the status bar even when the window is closed, preventing accidental server stops.
+- **System Tray Integration**:
+  - **Windows**: Minimizes to the Windows Notification Area (System Tray) with right-click menu and single-instance lock.
+  - **macOS**: Runs in the macOS top Menu Bar.
+- **Native Window Controls**:
+  - **Windows**: Windows 10/11 dark titlebar overlay controls (`minimize`, `maximize`, `close`).
+  - **macOS**: Native hidden-inset window controls with safe fullscreen transitions.
 - **Retina SVG UI**: Modern clean styling without emojis.
 
 
