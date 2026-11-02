@@ -1,4 +1,4 @@
-# Personal Cloud Server
+# Local Cloud Server
 
 A lightweight, self-hosted personal cloud that turns your computer into a private cloud storage server. Access, stream, edit, upload, and download your files remotely from any smartphone, tablet, or PC over your local Wi-Fi or across the internet with zero router configuration.
 
@@ -52,8 +52,8 @@ A lightweight, self-hosted personal cloud that turns your computer into a privat
 
 ### 1. Clone & Navigate to Codebase
 ```bash
-git clone https://github.com/n0vemberain/cloud-server.git
-cd cloud-server/LocalServerCodebase
+git clone https://github.com/n0vemberain/local-cloud-server.git
+cd local-cloud-server/LocalServerCodebase
 npm install
 ```
 
@@ -95,4 +95,4 @@ Open the URL shown in the terminal (Local URL or Remote URL) or scan the termina
 - **Author**: Fatin Ishraque
 - **Email**: [fatinishraque2@gmail.com](mailto:fatinishraque2@gmail.com)
 - **GitHub**: [github.com/n0vemberain](https://github.com/n0vemberain)
-- **Repository**: [github.com/n0vemberain/cloud-server](https://github.com/n0vemberain/cloud-server)
+- **Repository**: [github.com/n0vemberain/local-cloud-server](https://github.com/n0vemberain/local-cloud-server)
