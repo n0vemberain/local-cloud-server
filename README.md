@@ -4,6 +4,14 @@ A lightweight, self-hosted personal cloud that turns your computer into a privat
 
 ---
 
+## Repository Structure
+
+- **`LocalServerCodebase/`**: Core Node.js backend server, web dashboard, API handlers, and assets.
+- **`LocalServerMacOs/`**: Dedicated macOS build assets and executables.
+- **`LocalServerWindows/`**: Dedicated Windows build assets and executables.
+
+---
+
 ## What Can You Do With It?
 
 - **Access Your Files Anywhere**: Connect securely over local Wi-Fi or across the internet via encrypted Cloudflare Tunnels (no public IP or router port forwarding needed).
@@ -18,34 +26,34 @@ A lightweight, self-hosted personal cloud that turns your computer into a privat
 
 ## Interface Preview
 
-![Personal Cloud Server Interface - 01](images/01.png)
+![Personal Cloud Server Interface - 01](LocalServerCodebase/images/01.png)
 
-![Personal Cloud Server Interface - 02](images/02.png)
+![Personal Cloud Server Interface - 02](LocalServerCodebase/images/02.png)
 
-![Personal Cloud Server Interface - 03](images/03.png)
+![Personal Cloud Server Interface - 03](LocalServerCodebase/images/03.png)
 
-![Personal Cloud Server Interface - 04](images/04.png)
+![Personal Cloud Server Interface - 04](LocalServerCodebase/images/04.png)
 
-![Personal Cloud Server Interface - 05](images/05.png)
+![Personal Cloud Server Interface - 05](LocalServerCodebase/images/05.png)
 
-![Personal Cloud Server Interface - 06](images/06.png)
+![Personal Cloud Server Interface - 06](LocalServerCodebase/images/06.png)
 
-![Personal Cloud Server Interface - 07](images/07.png)
+![Personal Cloud Server Interface - 07](LocalServerCodebase/images/07.png)
 
-![Personal Cloud Server Interface - 08](images/08.png)
+![Personal Cloud Server Interface - 08](LocalServerCodebase/images/08.png)
 
-![Personal Cloud Server Interface - 09](images/09.png)
+![Personal Cloud Server Interface - 09](LocalServerCodebase/images/09.png)
 
-![Personal Cloud Server Interface - 10](images/10.png)
+![Personal Cloud Server Interface - 10](LocalServerCodebase/images/10.png)
 
 ---
 
 ## Quick Start
 
-### 1. Clone & Install
+### 1. Clone & Navigate to Codebase
 ```bash
 git clone https://github.com/n0vemberain/cloud-server.git
-cd cloud-server
+cd cloud-server/LocalServerCodebase
 npm install
 ```
 
