@@ -7,8 +7,24 @@ A lightweight, self-hosted personal cloud that turns your computer into a privat
 ## Repository Structure
 
 - **`LocalServerCodebase/`**: Core Node.js backend server, web dashboard, API handlers, and assets.
-- **`LocalServerMacOs/`**: Dedicated macOS build assets and executables.
+- **`LocalServerMacOs/`**: Dedicated macOS native desktop application (Electron), source code, assets, and `.dmg` installer located in `LocalServerMacOs/release/`.
 - **`LocalServerWindows/`**: Dedicated Windows build assets and executables.
+
+---
+
+## macOS Native Application (DMG Installer)
+
+For macOS users, a standalone desktop application (`.dmg`) is provided in `LocalServerMacOs/release/Local Cloud Server-1.0.0-macOS-arm64.dmg`.
+
+### Key Features of macOS App:
+- **Zero Terminal Requirement**: Just double-click the app to start the server.
+- **Auto Wi-Fi Detection & QR Code**: Instantly scans your local Wi-Fi interface and renders a QR code for mobile devices.
+- **Encrypted Remote Tunneling**: Auto-initializes Cloudflare Tunnel for worldwide secure access with remote QR code.
+- **Collapsible Sidebar**: Modern collapsible navigation sidebar with smooth animations and edge trigger tab.
+- **High-Performance Video Streaming**: Native HTTP 206 partial-range video streaming and real-time transcoding for MKV/MP4/MOV/AVI.
+- **macOS Menu Bar Tray**: Runs quietly in the status bar even when the window is closed, preventing accidental server stops.
+- **Retina SVG UI**: Modern clean styling without emojis.
+
 
 ---
 

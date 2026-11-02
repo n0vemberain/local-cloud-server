@@ -17,3 +17,13 @@ bin/
 # Environment variables
 .env
 .env.local
+
+# Test reports
+**/TEST_REPORT.md
+TEST_REPORT.md
+
+# macOS Desktop App Intermediate Build Outputs
+LocalServerMacOs/release/mac-arm64/
+LocalServerMacOs/release/*.yml
+LocalServerMacOs/release/*.yaml
+
