@@ -22,8 +22,7 @@ bin/
 **/TEST_REPORT.md
 TEST_REPORT.md
 
-# macOS Desktop App Intermediate Build Outputs
-LocalServerMacOs/release/mac-arm64/
-LocalServerMacOs/release/*.yml
-LocalServerMacOs/release/*.yaml
+# macOS Desktop App Build Outputs & Installers (hosted via GitHub Releases)
+LocalServerMacOs/release/
+
 
