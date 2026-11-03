@@ -16,9 +16,26 @@ The transition of the Local Server application into a dedicated, native Windows 
 1. **Windows System Tray & Notification Area**: Runs in the background with taskbar tray icon, context menu, and single/double-click window toggle.
 2. **Single-Instance Protection**: Enforces `app.requestSingleInstanceLock()`; subsequent launches focus the running instance without port collisions.
 3. **Windows 10/11 Titlebar Overlay**: Integrated with `titleBarOverlay` providing native Windows minimize, maximize, and close controls on top of the dark glassmorphic interface.
-4. **Bundled Windows Binaries**: Includes 64-bit Windows `cloudflared.exe` for encrypted remote tunneling and `ffmpeg.exe` resolution for real-time video transmuxing.
+4. **Bundled Windows Binaries**: Includes 64-bit Windows `cloudflared.exe` for encrypted remote tunneling and native `ffmpeg.exe` for real-time video transmuxing.
 5. **Windows Path Architecture**: Stores isolated persistent user data in `%APPDATA%\Local Cloud Server\data`.
 6. **File Explorer Quick Access**: One-click opening of shared folders directly in Windows File Explorer.
+
+---
+
+## Bug Fix & Packaging Resolution (Missing `is-stream` & Native `ffmpeg.exe`)
+
+- **Issue Reported**: On launching the installed Windows application, an uncaught JavaScript exception was thrown:
+  ```text
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'is-stream' imported from 
+  C:\Users\...\AppData\Local\Programs\Local Cloud Server\resources\app.asar\node_modules\archiver\lib\core.js
+  ```
+- **Root Cause**: `node_modules` was initially linked across workspaces without an independent `package-lock.json`, causing `electron-builder` to be unable to map the transitive sub-dependencies of `archiver` (`is-stream`, `zip-stream`, `lazystream`, etc.), resulting in an incomplete 1.5 MB `app.asar`. Additionally, `ffmpeg-static` only held the host platform binary.
+- **Resolution**:
+  1. Generated an independent, fully-resolved `package-lock.json` and executed clean `npm install` inside `LocalServerWindows`.
+  2. Downloaded the native 64-bit Windows `ffmpeg.exe` binary via `npm_config_platform=win32 npm_config_arch=x64 node node_modules/ffmpeg-static/install.js`.
+  3. Rebuilt `app.asar`, which grew from 1.5 MB to 12.0 MB, properly bundling all runtime sub-dependencies.
+  4. Verified module loading directly against extracted ASAR contents (`is-stream`, `archiver`, `express` load with 0 errors).
+  5. Recompiled the full NSIS setup installer (`Local-Cloud-Server-1.0.0-Windows-x64.exe`, 165 MB) and updated the release asset on GitHub Releases.
 
 ---
 

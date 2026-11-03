@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 package-lock.json
+!LocalServerWindows/package-lock.json
 
 # Local runtime data & credentials
 data/
